@@ -9,7 +9,6 @@ namespace Worqnets.Examples.ColorGenetics2D
         public float Green;
         public float Blue;
 
-        private bool _isDead;
         public float SurvivalTime;
 
         private SpriteRenderer _renderer;
@@ -25,7 +24,6 @@ namespace Worqnets.Examples.ColorGenetics2D
         
         private void OnMouseDown()
         {
-            _isDead = true;
             SurvivalTime = PopulationManager.ElapsedTime;
             _renderer.enabled = false;
             _collider.enabled = false;

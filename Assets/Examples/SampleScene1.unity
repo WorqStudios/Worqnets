@@ -143,6 +143,7 @@ MonoBehaviour:
     type: 2}
   PopulationSize: 10
   TrialTime: 10
+  PercentageMutation: 4.8
 --- !u!4 &238108211
 Transform:
   m_ObjectHideFlags: 0
