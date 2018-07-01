@@ -21,17 +21,8 @@ namespace Worqnets.Examples.ColorGenetics2D
             _collider = GetComponent<Collider2D>();
             
             _renderer.color = new Color(Red, Green, Blue);
-            Debug.Log(Red);
         }
-
-        private void Update()
-        {
-            if (_isDead)
-            {
-                
-            }
-        }
-
+        
         private void OnMouseDown()
         {
             _isDead = true;

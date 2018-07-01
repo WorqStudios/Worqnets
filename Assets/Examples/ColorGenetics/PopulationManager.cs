@@ -6,11 +6,12 @@ namespace Worqnets.Examples.ColorGenetics2D
 {
     public class PopulationManager : MonoBehaviour
     {
-        public static float ElapsedTime = 0f;
+        public static float ElapsedTime;
 
         public GameObject PersonPrefab;
         public int PopulationSize = 10;
         public float TrialTime = 10f;
+        [Range(0, 100)] public float PercentageMutation = 5f;
 
         private int _generation = 1;
 
@@ -51,15 +52,9 @@ namespace Worqnets.Examples.ColorGenetics2D
 
         private void BreedNewGeneration()
         {
-            //var newPopulation = new List<GameObject>();
             var sortedList = _population.OrderBy(o => o.GetComponent<ColorDNA2D>().SurvivalTime).ToList();
 
             _population.Clear();
-
-            foreach (var o in sortedList)
-            {
-                Debug.Log(o.gameObject.name + " -> " + o.GetComponent<ColorDNA2D>().Red);
-            }
 
             for (var i = sortedList.Count / 2 - 1; i < sortedList.Count - 1; i++)
             {
@@ -86,13 +81,20 @@ namespace Worqnets.Examples.ColorGenetics2D
 
             var offspringDna = offspring.GetComponent<ColorDNA2D>();
 
-            offspringDna.Red = Random.Range(0f, 10f) < 4f ? fatherDna.Red : motherDna.Red;
-            offspringDna.Green = Random.Range(0f, 10f) < 4f ? fatherDna.Green : motherDna.Green;
-            offspringDna.Blue = Random.Range(0f, 10f) < 4f ? fatherDna.Blue : motherDna.Blue;
+            var percentageMutation = PercentageMutation / 100 * PopulationSize;
 
-//            Debug.Log(offspringDna.Red);
-//            Debug.Log(offspringDna.Green);
-//            Debug.Log(offspringDna.Blue);
+            if (Random.Range(0, PopulationSize) > percentageMutation)
+            {
+                offspringDna.Red = Random.Range(0f, 10f) < 4f ? fatherDna.Red : motherDna.Red;
+                offspringDna.Green = Random.Range(0f, 10f) < 4f ? fatherDna.Green : motherDna.Green;
+                offspringDna.Blue = Random.Range(0f, 10f) < 4f ? fatherDna.Blue : motherDna.Blue;
+            }
+            else
+            {
+                offspringDna.Red = Random.Range(0, 1f);
+                offspringDna.Green = Random.Range(0, 1f);
+                offspringDna.Blue = Random.Range(0, 1f);
+            }
 
             return offspring;
         }
