@@ -28,12 +28,9 @@ namespace Worqnets.Examples.ColorGenetics2D
             {
                 var position = new Vector3(Random.Range(-8f, 8f), Random.Range(-4f, 6f), 0);
                 var entity = Instantiate(PersonPrefab, position, PersonPrefab.transform.rotation);
-
-                entity.transform.localScale = new Vector3(
-                    Random.Range(.2f, 1f),
-                    Random.Range(.2f, 1f),
-                    Random.Range(.2f, 1f));
-
+                
+                SetRandomSize(entity);
+                
                 entity.transform.SetParent(transform);
 
                 if (!entity.GetComponent<DNA>()) entity.AddComponent<DNA>();
@@ -95,7 +92,7 @@ namespace Worqnets.Examples.ColorGenetics2D
             switch (SelectionCriteria)
             {
                 case SelectionCriteria.Color:
-                    if (Random.Range(0, PopulationSize) > percentageMutation)
+                    if (Random.Range(1, PopulationSize) > percentageMutation)
                     {
                         InheritColor(fatherDna, motherDna, offspringDna);
                         SetRandomSize(offspring);
@@ -130,10 +127,13 @@ namespace Worqnets.Examples.ColorGenetics2D
         private static void InheritSize(GameObject father, GameObject mother, GameObject offspring)
         {
             offspring.transform.localScale = new Vector3(
-                Random.Range(0f, 1f) < .5f ? father.transform.localScale.x : mother.transform.localScale.x,
-                Random.Range(0f, 1f) < .5f ? father.transform.localScale.y : mother.transform.localScale.y,
-                Random.Range(0f, 1f) < .5f ? father.transform.localScale.z : mother.transform.localScale.z
+                Random.Range(father.transform.localScale.x , mother.transform.localScale.x),
+                Random.Range(father.transform.localScale.y , mother.transform.localScale.y),
+                Random.Range(father.transform.localScale.z , mother.transform.localScale.z)
             );
+            
+            offspring.transform.localScale = 
+                Random.Range(0f, 1f) < .5f ? father.transform.localScale : mother.transform.localScale;
         }
 
         private static void SetRandomColor(DNA offspringDna)
@@ -143,12 +143,14 @@ namespace Worqnets.Examples.ColorGenetics2D
             offspringDna.Blue = Random.Range(0, 1f);
         }
 
-        private static void SetRandomSize(GameObject offspring)
+        private static void SetRandomSize(GameObject entity)
         {
-            offspring.transform.localScale = new Vector3(
-                Random.Range(.2f, 1f),
-                Random.Range(.2f, 1f),
-                Random.Range(.2f, 1f));
+            var randomSize = Random.Range(.5f, 2f);
+            
+            entity.transform.localScale = new Vector3(
+                entity.transform.localScale.x * randomSize,
+                entity.transform.localScale.y * randomSize,
+                entity.transform.localScale.z);
         }
 
         private static void InheritColor(DNA fatherDna, DNA motherDna, DNA offspringDna)
