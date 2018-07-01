@@ -2,6 +2,7 @@
 
 namespace Worqnets.Examples.ColorGenetics2D
 {
+    [DisallowMultipleComponent]
     public class ColorDNA2D : MonoBehaviour
     {
         public float Red;
@@ -19,7 +20,8 @@ namespace Worqnets.Examples.ColorGenetics2D
             _renderer = GetComponent<SpriteRenderer>();
             _collider = GetComponent<Collider2D>();
             
-            _renderer.color = new Color(Red, Green, Blue, 1);
+            _renderer.color = new Color(Red, Green, Blue);
+            Debug.Log(Red);
         }
 
         private void Update()

@@ -14,24 +14,26 @@ namespace Worqnets.Examples.ColorGenetics2D
 
         private int _generation = 1;
 
-        private List<GameObject> _population = new List<GameObject>();
+        private readonly List<GameObject> _population = new List<GameObject>();
 
-        private GUIStyle _guiStyle = new GUIStyle();
+        private readonly GUIStyle _guiStyle = new GUIStyle();
 
-        private void Awake()
+        private void Start()
         {
             for (var i = 0; i < PopulationSize; i++)
             {
                 var position = new Vector3(Random.Range(-8f, 8f), Random.Range(-4f, 6f), 0);
-                var person = Instantiate(PersonPrefab, position, PersonPrefab.transform.rotation);
-                person.transform.SetParent(transform);
-                var dna = person.AddComponent<ColorDNA2D>();
+                var entity = Instantiate(PersonPrefab, position, PersonPrefab.transform.rotation);
+                entity.transform.SetParent(transform);
+                
+                if (!entity.GetComponent<ColorDNA2D>()) entity.AddComponent<ColorDNA2D>();
+                var dna = entity.GetComponent<ColorDNA2D>();
 
                 dna.Red = Random.Range(0, 1f);
                 dna.Green = Random.Range(0, 1f);
                 dna.Blue = Random.Range(0, 1f);
 
-                _population.Add(person);
+                _population.Add(entity);
             }
         }
 
@@ -39,6 +41,7 @@ namespace Worqnets.Examples.ColorGenetics2D
         {
             ElapsedTime += Time.deltaTime;
 
+            // ReSharper disable once InvertIf
             if (ElapsedTime > TrialTime)
             {
                 BreedNewGeneration();
@@ -48,10 +51,16 @@ namespace Worqnets.Examples.ColorGenetics2D
 
         private void BreedNewGeneration()
         {
-            var newPopulation = new List<GameObject>();
+            //var newPopulation = new List<GameObject>();
             var sortedList = _population.OrderBy(o => o.GetComponent<ColorDNA2D>().SurvivalTime).ToList();
 
             _population.Clear();
+
+            foreach (var o in sortedList)
+            {
+                Debug.Log(o.gameObject.name + " -> " + o.GetComponent<ColorDNA2D>().Red);
+            }
+
             for (var i = sortedList.Count / 2 - 1; i < sortedList.Count - 1; i++)
             {
                 _population.Add(Breed(sortedList[i], sortedList[i + 1]));
@@ -74,19 +83,24 @@ namespace Worqnets.Examples.ColorGenetics2D
 
             var fatherDna = father.GetComponent<ColorDNA2D>();
             var motherDna = mother.GetComponent<ColorDNA2D>();
-            var offspringDna = mother.AddComponent<ColorDNA2D>();
 
-            offspringDna.Red = Random.Range(0f, 1f) < .5f ? fatherDna.Red : motherDna.Red;
-            offspringDna.Green = Random.Range(0f, 1f) < .5f ? fatherDna.Red : motherDna.Red;
-            offspringDna.Blue = Random.Range(0f, 1f) < .5f ? fatherDna.Red : motherDna.Red;
-            
+            var offspringDna = offspring.GetComponent<ColorDNA2D>();
+
+            offspringDna.Red = Random.Range(0f, 10f) < 4f ? fatherDna.Red : motherDna.Red;
+            offspringDna.Green = Random.Range(0f, 10f) < 4f ? fatherDna.Green : motherDna.Green;
+            offspringDna.Blue = Random.Range(0f, 10f) < 4f ? fatherDna.Blue : motherDna.Blue;
+
+//            Debug.Log(offspringDna.Red);
+//            Debug.Log(offspringDna.Green);
+//            Debug.Log(offspringDna.Blue);
+
             return offspring;
         }
 
         private void OnGUI()
         {
             _guiStyle.fontSize = 15;
-            _guiStyle.normal.textColor = Color.gray;
+            _guiStyle.normal.textColor = Color.red;
 
             GUI.Label(new Rect(10, 10, 100, 20), "Generation: " + _generation, _guiStyle);
             GUI.Label(new Rect(10, 70, 100, 20), "Elapsed Time: " +
