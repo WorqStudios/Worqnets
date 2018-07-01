@@ -8,8 +8,9 @@
       <e p="Assets" t="Include">
         <e p="Examples" t="Include">
           <e p="ColorGenetics" t="Include">
-            <e p="ColorDNA2D.cs" t="Include" />
+            <e p="DNA.cs" t="Include" />
             <e p="PopulationManager.cs" t="Include" />
+            <e p="SelectionCriteria.cs" t="Include" />
           </e>
         </e>
         <e p="Plugins" t="Include">

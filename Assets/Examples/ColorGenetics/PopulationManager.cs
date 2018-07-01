@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Worqnets.Examples.ColorGenetics2D
 {
@@ -11,6 +13,7 @@ namespace Worqnets.Examples.ColorGenetics2D
         public GameObject PersonPrefab;
         public int PopulationSize = 10;
         public float TrialTime = 10f;
+        public SelectionCriteria SelectionCriteria;
         [Range(0, 100)] public float PercentageMutation = 5f;
 
         private int _generation = 1;
@@ -19,16 +22,22 @@ namespace Worqnets.Examples.ColorGenetics2D
 
         private readonly GUIStyle _guiStyle = new GUIStyle();
 
-        private void Start()
+        private void Awake()
         {
             for (var i = 0; i < PopulationSize; i++)
             {
                 var position = new Vector3(Random.Range(-8f, 8f), Random.Range(-4f, 6f), 0);
                 var entity = Instantiate(PersonPrefab, position, PersonPrefab.transform.rotation);
+
+                entity.transform.localScale = new Vector3(
+                    Random.Range(.2f, 1f),
+                    Random.Range(.2f, 1f),
+                    Random.Range(.2f, 1f));
+
                 entity.transform.SetParent(transform);
-                
-                if (!entity.GetComponent<ColorDNA2D>()) entity.AddComponent<ColorDNA2D>();
-                var dna = entity.GetComponent<ColorDNA2D>();
+
+                if (!entity.GetComponent<DNA>()) entity.AddComponent<DNA>();
+                var dna = entity.GetComponent<DNA>();
 
                 dna.Red = Random.Range(0, 1f);
                 dna.Green = Random.Range(0, 1f);
@@ -52,7 +61,7 @@ namespace Worqnets.Examples.ColorGenetics2D
 
         private void BreedNewGeneration()
         {
-            var sortedList = _population.OrderBy(o => o.GetComponent<ColorDNA2D>().SurvivalTime).ToList();
+            var sortedList = _population.OrderBy(o => o.GetComponent<DNA>().SurvivalTime).ToList();
 
             _population.Clear();
 
@@ -76,27 +85,77 @@ namespace Worqnets.Examples.ColorGenetics2D
             var offspring = Instantiate(PersonPrefab, position, PersonPrefab.transform.rotation);
             offspring.transform.SetParent(transform);
 
-            var fatherDna = father.GetComponent<ColorDNA2D>();
-            var motherDna = mother.GetComponent<ColorDNA2D>();
+            var fatherDna = father.GetComponent<DNA>();
+            var motherDna = mother.GetComponent<DNA>();
 
-            var offspringDna = offspring.GetComponent<ColorDNA2D>();
+            var offspringDna = offspring.GetComponent<DNA>();
 
             var percentageMutation = PercentageMutation / 100 * PopulationSize;
 
-            if (Random.Range(0, PopulationSize) > percentageMutation)
+            switch (SelectionCriteria)
             {
-                offspringDna.Red = Random.Range(0f, 10f) < 4f ? fatherDna.Red : motherDna.Red;
-                offspringDna.Green = Random.Range(0f, 10f) < 4f ? fatherDna.Green : motherDna.Green;
-                offspringDna.Blue = Random.Range(0f, 10f) < 4f ? fatherDna.Blue : motherDna.Blue;
-            }
-            else
-            {
-                offspringDna.Red = Random.Range(0, 1f);
-                offspringDna.Green = Random.Range(0, 1f);
-                offspringDna.Blue = Random.Range(0, 1f);
+                case SelectionCriteria.Color:
+                    if (Random.Range(0, PopulationSize) > percentageMutation)
+                    {
+                        InheritColor(fatherDna, motherDna, offspringDna);
+                        SetRandomSize(offspring);
+                    }
+                    else
+                    {
+                        SetRandomColor(offspringDna);
+                        SetRandomSize(offspring);
+                    }
+
+                    break;
+                case SelectionCriteria.Size:
+                    if (Random.Range(0, PopulationSize) > percentageMutation)
+                    {
+                        InheritSize(father, mother, offspring);
+                        SetRandomColor(offspringDna);
+                    }
+                    else
+                    {
+                        SetRandomSize(offspring);
+                        SetRandomColor(offspringDna);
+                    }
+
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
             return offspring;
+        }
+
+        private static void InheritSize(GameObject father, GameObject mother, GameObject offspring)
+        {
+            offspring.transform.localScale = new Vector3(
+                Random.Range(0f, 1f) < .5f ? father.transform.localScale.x : mother.transform.localScale.x,
+                Random.Range(0f, 1f) < .5f ? father.transform.localScale.y : mother.transform.localScale.y,
+                Random.Range(0f, 1f) < .5f ? father.transform.localScale.z : mother.transform.localScale.z
+            );
+        }
+
+        private static void SetRandomColor(DNA offspringDna)
+        {
+            offspringDna.Red = Random.Range(0, 1f);
+            offspringDna.Green = Random.Range(0, 1f);
+            offspringDna.Blue = Random.Range(0, 1f);
+        }
+
+        private static void SetRandomSize(GameObject offspring)
+        {
+            offspring.transform.localScale = new Vector3(
+                Random.Range(.2f, 1f),
+                Random.Range(.2f, 1f),
+                Random.Range(.2f, 1f));
+        }
+
+        private static void InheritColor(DNA fatherDna, DNA motherDna, DNA offspringDna)
+        {
+            offspringDna.Red = Random.Range(0f, 1f) < .5f ? fatherDna.Red : motherDna.Red;
+            offspringDna.Green = Random.Range(0f, 1f) < .5f ? fatherDna.Green : motherDna.Green;
+            offspringDna.Blue = Random.Range(0f, 1f) < .5f ? fatherDna.Blue : motherDna.Blue;
         }
 
         private void OnGUI()
