@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Worqnets.Examples.ColorGenetics2D
+namespace Worq.Worqnets.Examples.GeneticAlgorithm
 {
     [DisallowMultipleComponent]
     public class DNA : MonoBehaviour

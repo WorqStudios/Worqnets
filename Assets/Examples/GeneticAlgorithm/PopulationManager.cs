@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace Worqnets.Examples.ColorGenetics2D
+namespace Worq.Worqnets.Examples.GeneticAlgorithm
 {
     public class PopulationManager : MonoBehaviour
     {

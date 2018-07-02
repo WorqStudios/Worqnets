@@ -1,4 +1,4 @@
-﻿namespace Worqnets.Examples.ColorGenetics2D
+﻿namespace Worq.Worqnets.Examples.GeneticAlgorithm
 {
     public enum SelectionCriteria
     {
