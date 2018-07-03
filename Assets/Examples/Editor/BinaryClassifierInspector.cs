@@ -15,10 +15,6 @@ namespace Worq.Worqnets.Examples.EditorScripts
         private void OnEnable()
         {
             SetTarget();
-            if (_target == null) return;
-            _target.TrainingData = _target.TrainingData ?? new List<TrainingData>();
-            _target.OldDimension = _target.Dimension;
-            _target.OldTrainingDataSize = _target.TrainingDataSize;
         }
 
         private void SetTarget()
@@ -38,92 +34,34 @@ namespace Worq.Worqnets.Examples.EditorScripts
 
             GUILayout.Space(20);
 
-            _target.TrainingDataSize = EditorGUILayout.IntField("Training Set Size", _target.TrainingDataSize);
-            _target.Dimension = EditorGUILayout.IntField("Dimension", _target.Dimension);
+            _target.TrainingData =
+                (TrainingData) EditorGUILayout.ObjectField("Training Data", _target.TrainingData, typeof(TrainingData));
 
-            if (_target.TrainingData == null || _target.TrainingData.Count < 1 ||
-                _target.Dimension != _target.OldDimension || _target.TrainingDataSize != _target.OldTrainingDataSize)
-            {
-                _target.TrainingData = new List<TrainingData>();
-                _target.ProblemData = new TrainingData(_target.Dimension);
-
-                for (var i = 0; i < _target.TrainingDataSize; i++)
-                {
-                    _target.TrainingData.Add(new TrainingData(_target.Dimension));
-                }
-
-                _target.OldDimension = _target.Dimension;
-                _target.OldTrainingDataSize = _target.TrainingDataSize;
-            }
-
+            if(!_target.TrainingData) return;
+            
             GUILayout.Space(10);
-
-            #region Training Section
-
-            if (GUILayout.Button("Training", EditorStyles.boldLabel))
+            if (GUILayout.Button("Train"))
             {
-                WorqnetsVariables.BcTrainingExpanded = !WorqnetsVariables.BcTrainingExpanded;
+                _target.Train();
             }
-
-            if (WorqnetsVariables.BcTrainingExpanded)
-            {
-                EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-                {
-                    for (var i = 0; i < _target.TrainingDataSize; i++)
-                    {
-                        EditorGUILayout.LabelField("Training Data " + (i + 1));
-                        EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-                        {
-                            for (var j = 0; j < _target.Dimension; j++)
-                            {
-                                _target.TrainingData[i].Values[j] =
-                                    EditorGUILayout.FloatField("Input" + (j + 1), _target.TrainingData[i].Values[j]);
-                            }
-
-                            GUILayout.Space(5);
-                            GUI.contentColor = Color.green;
-                            _target.TrainingData[i].Output =
-                                EditorGUILayout.FloatField("Output", _target.TrainingData[i].Output);
-                            GUI.contentColor = Color.white;
-                        }
-                        EditorGUILayout.EndVertical();
-                    }
-
-                    GUILayout.Space(10);
-                    if (GUILayout.Button("Train"))
-                    {
-                        _target.Train();
-                    }
-                }
-                EditorGUILayout.EndVertical();
-            }
-
-            #endregion
-
+            
             #region Problem Section
 
-//            if (_target.HasTrained)
-//            {
-                if (GUILayout.Button("Problem", EditorStyles.boldLabel))
-                {
-                    WorqnetsVariables.BcProblemExpanded = !WorqnetsVariables.BcProblemExpanded;
-                }
-//            }
-//            else
-//            {
-//                WorqnetsVariables.BcProblemExpanded = false;
-//            }
-
+            if (GUILayout.Button("Problem", EditorStyles.boldLabel))
+            {
+                WorqnetsVariables.BcProblemExpanded = !WorqnetsVariables.BcProblemExpanded;
+            }
+            
             // ReSharper disable once InvertIf
             if (WorqnetsVariables.BcProblemExpanded)
             {
                 EditorGUILayout.BeginVertical(EditorStyles.helpBox);
                 {
                     EditorGUILayout.LabelField("Problem Data");
-                    for (var i = 0; i < _target.Dimension; i++)
+                    for (var i = 0; i < _target.TrainingData.Dimension; i++)
                     {
                         _target.ProblemData.Values[i] =
-                            EditorGUILayout.FloatField("Input" + (i + 1), _target.TrainingData[i].Values[i]);
+                            EditorGUILayout.FloatField("Input" + (i + 1), _target.TrainingData.AllDataEntries[i].Values[i]);
                     }
                 }
 

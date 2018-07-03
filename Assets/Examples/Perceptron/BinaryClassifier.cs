@@ -6,25 +6,28 @@ namespace Worq.Worqnets.Examples.Perceptrons
 {
     public class BinaryClassifier : MonoBehaviour
     {
-        public List<TrainingData> TrainingData;
+//        public List<TrainDataEntry> TrainingData;
+//        
+//        public int Dimension;
+//        public int OldDimension;
+//        public int TrainingDataSize;
+//        public int OldTrainingDataSize;
         
-        public int Dimension;
-        public int OldDimension;
-        public int TrainingDataSize;
-        public int OldTrainingDataSize;
+        public TrainingData TrainingData;
 
+        public bool HasTrained;
         public int NumberOfEpochs;
         public float PredictedBias;
         
-        public TrainingData ProblemData;
+        public TrainDataEntry ProblemData;
 
         private float[] _weights;
-
-        public bool HasTrained;
+        private float _bias;
+        private float _totalError;
 
         public void Train()
         {
-            _weights = new float[TrainingDataSize];
+            _weights = new float[TrainingData.TrainingDataSize];
             HasTrained = true;
         }
 

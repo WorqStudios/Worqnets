@@ -1,22 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Worq.Worqnets.Examples.Perceptrons
 {
-    [Serializable]
-    public class TrainingData
+    [CreateAssetMenu(fileName =  "Perceptron Training Data")]
+    public class TrainingData : ScriptableObject
     {
-        public List<float> Values;
-        public float Output;
-
-        public TrainingData(int dimension)
-        {
-            Values = new List<float>();
-
-            for (var i = 0; i < dimension; i++)
-            {
-                Values.Add(0.0f);
-            }
-        }
+        public List<TrainDataEntry> AllDataEntries;
+        public int Dimension;
+        public int OldDimension;
+        public int TrainingDataSize;
+        public int OldTrainingDataSize;
     }
 }
