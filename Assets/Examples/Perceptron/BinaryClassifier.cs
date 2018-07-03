@@ -4,38 +4,40 @@ using UnityEngine;
 
 namespace Worq.Worqnets.Examples.Perceptrons
 {
-    public class Perceptron : MonoBehaviour
+    public class BinaryClassifier : MonoBehaviour
     {
         public List<TrainingData> TrainingData;
         
         public int Dimension;
         public int OldDimension;
-        public int TrainingSetSize;
-        public int OldTrainingSetSize;
+        public int TrainingDataSize;
+        public int OldTrainingDataSize;
 
+        public int NumberOfEpochs;
+        public float PredictedBias;
+        
         public TrainingData ProblemData;
 
         private float[] _weights;
 
-        private bool _hasTrained;
-
-        private void Awake()
-        {
-            _weights = new float[Dimension];
-        }
+        public bool HasTrained;
 
         public void Train()
         {
-            
+            _weights = new float[TrainingDataSize];
+            HasTrained = true;
         }
 
         public void Predict()
         {
-            if (!_hasTrained)
+            if (!HasTrained)
             {
                 WorqnetsUtils.PrintMessage("Please Train The Network Before Attempting To Predict", WorqnetsUtils.MessageType.Error);
                 return;
             }   
+            
+            //Do Predict
+            
         }
     }
 }

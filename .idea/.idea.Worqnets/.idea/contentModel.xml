@@ -9,7 +9,7 @@
       <e p="Assets" t="Include">
         <e p="Examples" t="Include">
           <e p="Editor" t="Include">
-            <e p="PerceptronInspector.cs" t="Include" />
+            <e p="BinaryClassifierInspector.cs" t="Include" />
           </e>
           <e p="GeneticAlgorithm" t="Include">
             <e p="DNA.cs" t="Include" />
@@ -17,7 +17,7 @@
             <e p="SelectionCriteria.cs" t="Include" />
           </e>
           <e p="Perceptron" t="Include">
-            <e p="Perceptron.cs" t="Include" />
+            <e p="BinaryClassifier.cs" t="Include" />
             <e p="TrainingData.cs" t="Include" />
           </e>
         </e>
