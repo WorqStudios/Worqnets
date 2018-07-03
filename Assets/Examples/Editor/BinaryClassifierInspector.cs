@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using DefaultNamespace;
 using UnityEditor;
 using UnityEngine;
 using Worq.Worqnets.Examples.Perceptrons;
@@ -55,89 +56,111 @@ namespace Worq.Worqnets.Examples.EditorScripts
             }
 
             GUILayout.Space(10);
-            //Training Section
-            EditorGUILayout.LabelField("Training");
-            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+
+            #region Training Section
+
+            if (GUILayout.Button("Training", EditorStyles.boldLabel))
             {
-                for (var i = 0; i < _target.TrainingDataSize; i++)
+                WorqnetsVariables.BcTrainingExpanded = !WorqnetsVariables.BcTrainingExpanded;
+            }
+
+            if (WorqnetsVariables.BcTrainingExpanded)
+            {
+                EditorGUILayout.BeginVertical(EditorStyles.helpBox);
                 {
-                    EditorGUILayout.LabelField("Training Data " + (i + 1));
-                    EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+                    for (var i = 0; i < _target.TrainingDataSize; i++)
                     {
-                        for (var j = 0; j < _target.Dimension; j++)
+                        EditorGUILayout.LabelField("Training Data " + (i + 1));
+                        EditorGUILayout.BeginVertical(EditorStyles.helpBox);
                         {
-                            _target.TrainingData[i].Values[j] =
-                                EditorGUILayout.FloatField("Input" + (j + 1), _target.TrainingData[i].Values[j]);
+                            for (var j = 0; j < _target.Dimension; j++)
+                            {
+                                _target.TrainingData[i].Values[j] =
+                                    EditorGUILayout.FloatField("Input" + (j + 1), _target.TrainingData[i].Values[j]);
+                            }
+
+                            GUILayout.Space(5);
+                            GUI.contentColor = Color.green;
+                            _target.TrainingData[i].Output =
+                                EditorGUILayout.FloatField("Output", _target.TrainingData[i].Output);
+                            GUI.contentColor = Color.white;
                         }
-
-                        GUILayout.Space(5);
-                        GUI.contentColor = Color.green;
-                        _target.TrainingData[i].Output =
-                            EditorGUILayout.FloatField("Output", _target.TrainingData[i].Output);
-                        GUI.contentColor = Color.white;
+                        EditorGUILayout.EndVertical();
                     }
-                    EditorGUILayout.EndVertical();
-                }
 
-                GUILayout.Space(10);
-                if (GUILayout.Button("Train"))
+                    GUILayout.Space(10);
+                    if (GUILayout.Button("Train"))
+                    {
+                        _target.Train();
+                    }
+                }
+                EditorGUILayout.EndVertical();
+            }
+
+            #endregion
+
+            #region Problem Section
+
+            if (GUILayout.Button("Problem", EditorStyles.boldLabel))
+            {
+                WorqnetsVariables.BcProblemExpanded = !WorqnetsVariables.BcProblemExpanded;
+            }
+
+            // ReSharper disable once InvertIf
+            if (WorqnetsVariables.BcProblemExpanded)
+            {
+                EditorGUILayout.BeginVertical(EditorStyles.helpBox);
                 {
-                    _target.Train();
+                    EditorGUILayout.LabelField("Problem Data");
+                    for (var i = 0; i < _target.Dimension; i++)
+                    {
+                        _target.ProblemData.Values[i] =
+                            EditorGUILayout.FloatField("Input" + (i + 1), _target.TrainingData[i].Values[i]);
+                    }
                 }
-            }
-            EditorGUILayout.EndVertical();
-            
-            //Prediction Section
-            EditorGUILayout.LabelField("Problem");
-            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-            {
-                EditorGUILayout.LabelField("Problem Data");
-                for (var i = 0; i < _target.Dimension; i++)
-                {
-                    _target.ProblemData.Values[i] =
-                        EditorGUILayout.FloatField("Input" + (i + 1), _target.TrainingData[i].Values[i]);
-                }
-            }
 
 
-            GUILayout.Space(5);
-            if (GUILayout.Button("Predict"))
-            {
-                _target.Predict();
-            }
-
-            EditorGUILayout.LabelField("Results");
-            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-            {
                 GUILayout.Space(5);
-                GUI.contentColor = Color.green;
-
-                EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
+                if (GUILayout.Button("Predict"))
                 {
-                    EditorGUILayout.LabelField("Prediction", GUILayout.Width(100));
-                    EditorGUILayout.LabelField(_target.ProblemData.Output.ToString(CultureInfo.CurrentCulture),
-                        GUILayout.Width(100));
+                    _target.Predict();
                 }
-                EditorGUILayout.EndHorizontal();
 
-                EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
+                EditorGUILayout.LabelField("Results");
+                EditorGUILayout.BeginVertical(EditorStyles.helpBox);
                 {
-                    EditorGUILayout.LabelField("Total Epochs", GUILayout.Width(100));
-                    EditorGUILayout.LabelField(_target.NumberOfEpochs.ToString(), GUILayout.Width(100));
-                }
-                EditorGUILayout.EndHorizontal();
+                    GUILayout.Space(5);
+                    GUI.contentColor = Color.green;
 
-                EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
-                {
-                    EditorGUILayout.LabelField("Predicted Bias", GUILayout.Width(100));
-                    EditorGUILayout.LabelField(_target.PredictedBias.ToString(CultureInfo.CurrentCulture),
-                        GUILayout.Width(100));
-                }
-                EditorGUILayout.EndHorizontal();
+                    EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
+                    {
+                        EditorGUILayout.LabelField("Prediction", GUILayout.Width(100));
+                        EditorGUILayout.LabelField(_target.ProblemData.Output.ToString(CultureInfo.CurrentCulture),
+                            GUILayout.Width(100));
+                    }
+                    EditorGUILayout.EndHorizontal();
 
-                GUI.contentColor = Color.white;
+                    EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
+                    {
+                        EditorGUILayout.LabelField("Total Epochs", GUILayout.Width(100));
+                        EditorGUILayout.LabelField(_target.NumberOfEpochs.ToString(), GUILayout.Width(100));
+                    }
+                    EditorGUILayout.EndHorizontal();
+
+                    EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
+                    {
+                        EditorGUILayout.LabelField("Predicted Bias", GUILayout.Width(100));
+                        EditorGUILayout.LabelField(_target.PredictedBias.ToString(CultureInfo.CurrentCulture),
+                            GUILayout.Width(100));
+                    }
+                    EditorGUILayout.EndHorizontal();
+
+                    GUI.contentColor = Color.white;
+                }
+                EditorGUILayout.EndVertical();
             }
-            EditorGUILayout.EndVertical();
+
+            #endregion
         }
     }
 }
