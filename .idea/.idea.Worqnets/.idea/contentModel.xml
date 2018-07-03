@@ -28,6 +28,9 @@
             </e>
           </e>
         </e>
+        <e p="Scripts" t="Include">
+          <e p="WorqnetsUtils.cs" t="Include" />
+        </e>
       </e>
       <e p="Library" t="ExcludeRecursive" />
       <e p="obj" t="ExcludeRecursive" />

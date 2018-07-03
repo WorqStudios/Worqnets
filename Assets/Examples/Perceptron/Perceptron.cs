@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using DefaultNamespace;
 using UnityEngine;
 
 namespace Worq.Worqnets.Examples.Perceptrons
@@ -16,6 +17,8 @@ namespace Worq.Worqnets.Examples.Perceptrons
 
         private float[] _weights;
 
+        private bool _hasTrained;
+
         private void Awake()
         {
             _weights = new float[Dimension];
@@ -28,7 +31,11 @@ namespace Worq.Worqnets.Examples.Perceptrons
 
         public void Predict()
         {
-            
+            if (!_hasTrained)
+            {
+                WorqnetsUtils.PrintMessage("Please Train The Network Before Attempting To Predict", WorqnetsUtils.MessageType.Error);
+                return;
+            }   
         }
     }
 }
