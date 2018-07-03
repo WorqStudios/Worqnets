@@ -33,8 +33,8 @@ namespace Worq.Worqnets.Examples.EditorScripts
             GUILayout.Space(20);
 
             _target.TrainingData =
-                (TrainingData) EditorGUILayout.ObjectField("Training Data", _target.TrainingData, typeof(TrainingData),
-                    false);
+                (TrainingData) EditorGUILayout.ObjectField("Training Data", _target.TrainingData, 
+                    typeof(TrainingData), false);
 
             if (!_target.TrainingData) return;
 
@@ -88,16 +88,16 @@ namespace Worq.Worqnets.Examples.EditorScripts
 
                 EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
                 {
-                    EditorGUILayout.LabelField("Total Epochs", GUILayout.Width(100));
-                    EditorGUILayout.LabelField(_target.NumberOfEpochs.ToString(), GUILayout.Width(100));
+                    EditorGUILayout.LabelField("Prediction Value", GUILayout.Width(100));
+                    EditorGUILayout.LabelField(_target.PredictedValue.ToString(CultureInfo.CurrentCulture),
+                        GUILayout.Width(100));
                 }
                 EditorGUILayout.EndHorizontal();
 
                 EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
                 {
-                    EditorGUILayout.LabelField("Predicted Bias", GUILayout.Width(100));
-                    EditorGUILayout.LabelField(_target.PredictedBias.ToString(CultureInfo.CurrentCulture),
-                        GUILayout.Width(100));
+                    EditorGUILayout.LabelField("Total Epochs", GUILayout.Width(100));
+                    EditorGUILayout.LabelField(_target.EpochsPerformed.ToString(), GUILayout.Width(100));
                 }
                 EditorGUILayout.EndHorizontal();
 
