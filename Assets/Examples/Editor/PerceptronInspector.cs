@@ -13,7 +13,9 @@ namespace Worq.Worqnets.Examples.EditorScripts
         private void OnEnable()
         {
             _target = target as Perceptron;
-            _target.TrainingData = _target.TrainingData ?? new List<TrainingSet>();
+            _target.TrainingData = _target.TrainingData ?? new List<TrainingData>();
+            _target.OldDimension = _target.Dimension;
+            _target.OldTrainingSetSize = _target.TrainingSetSize;
         }
 
         public override void OnInspectorGUI()
@@ -23,13 +25,19 @@ namespace Worq.Worqnets.Examples.EditorScripts
             _target.TrainingSetSize = EditorGUILayout.IntField("Training Set Size", _target.TrainingSetSize);
             _target.Dimension = EditorGUILayout.IntField("Dimension", _target.Dimension);
 
-            if (_target.TrainingData == null || _target.TrainingData.Count < 1)
+            if (_target.TrainingData == null || _target.TrainingData.Count < 1 ||
+                _target.Dimension != _target.OldDimension || _target.TrainingSetSize != _target.OldTrainingSetSize)
             {
-                _target.TrainingData = new List<TrainingSet>();
+                _target.TrainingData = new List<TrainingData>();
+                _target.ProblemData = new TrainingData(_target.Dimension);
+
                 for (var i = 0; i < _target.TrainingSetSize; i++)
                 {
-                    _target.TrainingData.Add(new TrainingSet(_target.Dimension));
+                    _target.TrainingData.Add(new TrainingData(_target.Dimension));
                 }
+
+                _target.OldDimension = _target.Dimension;
+                _target.OldTrainingSetSize = _target.TrainingSetSize;
             }
 
             GUILayout.Space(10);
@@ -51,6 +59,38 @@ namespace Worq.Worqnets.Examples.EditorScripts
                     GUI.contentColor = Color.white;
                 }
                 EditorGUILayout.EndVertical();
+            }
+
+            GUILayout.Space(10);
+            if (GUILayout.Button("Train"))
+            {
+                _target.Train();
+            }
+
+            GUILayout.Space(5);
+            if (GUILayout.Button("Predict"))
+            {
+                _target.Predict();
+            }
+
+            EditorGUILayout.LabelField("Problem Data");
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+            {
+                for (var i = 0; i < _target.Dimension; i++)
+                {
+                    _target.ProblemData.Values[i] =
+                        EditorGUILayout.FloatField("Input" + (i + 1), _target.TrainingData[i].Values[i]);
+                }
+
+                GUILayout.Space(5);
+                GUI.contentColor = Color.green;
+                EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
+                {
+                    EditorGUILayout.LabelField("Prediction");
+                    EditorGUILayout.LabelField(_target.ProblemData.Output.ToString());
+                }
+                GUI.contentColor = Color.white;
+                EditorGUILayout.EndHorizontal();
             }
         }
     }

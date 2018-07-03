@@ -4,12 +4,12 @@ using System.Collections.Generic;
 namespace Worq.Worqnets.Examples.Perceptrons
 {
     [Serializable]
-    public class TrainingSet
+    public class TrainingData
     {
         public List<float> Values;
         public float Output;
 
-        public TrainingSet(int dimension)
+        public TrainingData(int dimension)
         {
             Values = new List<float>();
 

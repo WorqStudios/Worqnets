@@ -18,7 +18,7 @@
           </e>
           <e p="Perceptron" t="Include">
             <e p="Perceptron.cs" t="Include" />
-            <e p="TrainingSet.cs" t="Include" />
+            <e p="TrainingData.cs" t="Include" />
           </e>
         </e>
         <e p="Plugins" t="Include">
