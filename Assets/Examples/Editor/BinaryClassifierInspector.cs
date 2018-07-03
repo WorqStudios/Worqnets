@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Globalization;
 using DefaultNamespace;
 using UnityEditor;
 using UnityEngine;
@@ -37,21 +36,26 @@ namespace Worq.Worqnets.Examples.EditorScripts
             _target.TrainingData =
                 (TrainingData) EditorGUILayout.ObjectField("Training Data", _target.TrainingData, typeof(TrainingData));
 
-            if(!_target.TrainingData) return;
-            
+            if (!_target.TrainingData) return;
+
             GUILayout.Space(10);
             if (GUILayout.Button("Train"))
             {
                 _target.Train();
             }
-            
+
             #region Problem Section
+
+            if (_target.ProblemData == null)
+            {
+                _target.ProblemData = new TrainDataEntry(_target.TrainingData.Dimension);
+            }
 
             if (GUILayout.Button("Problem", EditorStyles.boldLabel))
             {
                 WorqnetsVariables.BcProblemExpanded = !WorqnetsVariables.BcProblemExpanded;
             }
-            
+
             // ReSharper disable once InvertIf
             if (WorqnetsVariables.BcProblemExpanded)
             {
@@ -61,7 +65,8 @@ namespace Worq.Worqnets.Examples.EditorScripts
                     for (var i = 0; i < _target.TrainingData.Dimension; i++)
                     {
                         _target.ProblemData.Values[i] =
-                            EditorGUILayout.FloatField("Input" + (i + 1), _target.TrainingData.AllDataEntries[i].Values[i]);
+                            EditorGUILayout.FloatField("Input" + (i + 1),
+                                _target.TrainingData.AllDataEntries[i].Values[i]);
                     }
                 }
 
