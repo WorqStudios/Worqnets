@@ -52,39 +52,31 @@ namespace Worq.Worqnets.Examples.EditorScripts
 
             #region Training Section
 
-            if (GUILayout.Button("Training", EditorStyles.boldLabel))
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
             {
-                WorqnetsVariables.BcTrainingExpanded = !WorqnetsVariables.BcTrainingExpanded;
-            }
-
-            if (WorqnetsVariables.BcTrainingExpanded)
-            {
-                EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+                for (var i = 0; i < _target.TrainingDataSize; i++)
                 {
-                    for (var i = 0; i < _target.TrainingDataSize; i++)
+                    EditorGUILayout.LabelField("Training Data " + (i + 1));
+                    EditorGUILayout.BeginVertical(EditorStyles.helpBox);
                     {
-                        EditorGUILayout.LabelField("Training Data " + (i + 1));
-                        EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+                        for (var j = 0; j < _target.Dimension; j++)
                         {
-                            for (var j = 0; j < _target.Dimension; j++)
-                            {
-                                _target.AllDataEntries[i].Values[j] =
-                                    EditorGUILayout.FloatField("Input" + (j + 1), _target.AllDataEntries[i].Values[j]);
-                            }
-
-                            GUILayout.Space(5);
-                            GUI.contentColor = Color.green;
-                            _target.AllDataEntries[i].Output =
-                                EditorGUILayout.FloatField("Output", _target.AllDataEntries[i].Output);
-                            GUI.contentColor = Color.white;
+                            _target.AllDataEntries[i].Values[j] =
+                                EditorGUILayout.FloatField("Input" + (j + 1), _target.AllDataEntries[i].Values[j]);
                         }
-                        EditorGUILayout.EndVertical();
-                    }
-                }
-                EditorGUILayout.EndVertical();
-            }
 
-            #endregion
+                        GUILayout.Space(5);
+                        GUI.contentColor = Color.green;
+                        _target.AllDataEntries[i].Output =
+                            EditorGUILayout.FloatField("Output", _target.AllDataEntries[i].Output);
+                        GUI.contentColor = Color.white;
+                    }
+                    EditorGUILayout.EndVertical();
+                }
+            }
+            EditorGUILayout.EndVertical();
         }
+
+        #endregion
     }
 }

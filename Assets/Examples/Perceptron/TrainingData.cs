@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Worq.Worqnets.Examples.Perceptrons
 {
-    [CreateAssetMenu(fileName =  "Perceptron Training Data")]
+    [CreateAssetMenu(fileName =  "Perceptron Training Data", menuName = "Worqnets/Perceptron Training Data")]
     public class TrainingData : ScriptableObject
     {
         public List<TrainDataEntry> AllDataEntries;
