@@ -32,6 +32,7 @@ namespace Worq.Worqnets.Examples.EditorScripts
 
             if (GUI.changed)
             {
+                Debug.Log("Some values chaned");
                 _target.HasTrained = false;
             }
 
@@ -101,10 +102,17 @@ namespace Worq.Worqnets.Examples.EditorScripts
 
             #region Problem Section
 
-            if (GUILayout.Button("Problem", EditorStyles.boldLabel))
-            {
-                WorqnetsVariables.BcProblemExpanded = !WorqnetsVariables.BcProblemExpanded;
-            }
+//            if (_target.HasTrained)
+//            {
+                if (GUILayout.Button("Problem", EditorStyles.boldLabel))
+                {
+                    WorqnetsVariables.BcProblemExpanded = !WorqnetsVariables.BcProblemExpanded;
+                }
+//            }
+//            else
+//            {
+//                WorqnetsVariables.BcProblemExpanded = false;
+//            }
 
             // ReSharper disable once InvertIf
             if (WorqnetsVariables.BcProblemExpanded)
