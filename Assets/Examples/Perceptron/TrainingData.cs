@@ -11,5 +11,8 @@ namespace Worq.Worqnets.Examples.Perceptrons
         public int OldDimension;
         public int TrainingDataSize;
         public int OldTrainingDataSize;
+
+        public List<float> CalculatedWeights;
+        public float CalculatedBias;
     }
 }

@@ -250,22 +250,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 563cb538671743ea814a76c5190d8cdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TrainingData:
-  - Values:
-    - 0
-    - 0
-    Output: 0
-  - Values:
-    - 0
+  TrainingData: {fileID: 11400000, guid: 1e4bc191f838a9944b17390532038087, type: 2}
+  MaxEpochs: 100
+  Epsilon: 0.01
+  RepetitionsAfterConverging: 2
+  HasTrained: 0
+  EpochsPerformed: 99
+  PredictedValue: 0.117987394
+  EnableDebug: 1
+  LastTrainingCouldNotConverge: 1
+  SaveTrainData: 1
+  ProblemData:
+    Values:
     - 1
-    Output: 1
-  - Values:
-    - 1
     - 0
-    Output: 1
-  - Values:
-    - 1
-    - 1
     Output: 1
 --- !u!4 &1156257712
 Transform:

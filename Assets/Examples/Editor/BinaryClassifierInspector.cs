@@ -24,12 +24,6 @@ namespace Worq.Worqnets.Examples.EditorScripts
         {
             if (!_target) SetTarget();
 
-            if (GUI.changed)
-            {
-                Debug.Log("Some values chaned");
-                _target.HasTrained = false;
-            }
-
             GUILayout.Space(20);
 
             _target.TrainingData =
@@ -38,22 +32,23 @@ namespace Worq.Worqnets.Examples.EditorScripts
 
             if (!_target.TrainingData) return;
 
-            GUILayout.Space(5);
-            _target.MaxEpochs = EditorGUILayout.IntField("Max Epochs", _target.MaxEpochs);
-            GUILayout.Space(5);
-            _target.Epsilon = EditorGUILayout.FloatField("Epsilon", _target.Epsilon);
-            GUILayout.Space(5);
-            _target.RepetitionsAfterConverging = EditorGUILayout.IntField("Repeat After Converging",
-                _target.RepetitionsAfterConverging);
-            GUILayout.Space(5);
-            _target.SaveTrainData = EditorGUILayout.Toggle("Save Train Data",
-                _target.SaveTrainData);
-            GUILayout.Space(5);
-            _target.EnableDebug = EditorGUILayout.Toggle("Enable Debugging",
-                _target.EnableDebug);
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+            {
+                GUILayout.Space(3);
+                _target.MaxEpochs = EditorGUILayout.IntField("Max Epochs", _target.MaxEpochs);
+                GUILayout.Space(3);
+                _target.Epsilon = EditorGUILayout.FloatField("Epsilon", _target.Epsilon);
+                GUILayout.Space(3);
+                _target.RepetitionsAfterConverging = EditorGUILayout.IntField("Repeat After Converging",
+                    _target.RepetitionsAfterConverging);
+                GUILayout.Space(3);
+                _target.EnableDebug = EditorGUILayout.Toggle("Enable Debugging",
+                    _target.EnableDebug);
+            }
+            EditorGUILayout.EndVertical();
 
             GUILayout.Space(5);
-            if (GUILayout.Button("Train"))
+            if (GUILayout.Button("Re-Train"))
             {
                 _target.DoTrain();
             }
@@ -106,29 +101,32 @@ namespace Worq.Worqnets.Examples.EditorScripts
                     EditorGUILayout.HelpBox("Perform Training first", MessageType.Warning);
                 }
 
-                EditorGUILayout.LabelField("Last Prediction Results");
-                EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+                if (!_target.LastTrainingCouldNotConverge)
                 {
-                    GUILayout.Space(5);
-                    GUI.contentColor = Color.green;
-
-                    EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
+                    EditorGUILayout.LabelField("Last Prediction Results");
+                    EditorGUILayout.BeginVertical(EditorStyles.helpBox);
                     {
-                        EditorGUILayout.LabelField("Prediction", GUILayout.Width(180));
-                        EditorGUILayout.LabelField(_target.ProblemData.Output.ToString(CultureInfo.CurrentCulture),
-                            GUILayout.Width(100));
-                    }
-                    EditorGUILayout.EndHorizontal();
+                        GUILayout.Space(5);
+                        GUI.contentColor = Color.green;
 
-                    EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
-                    {
-                        EditorGUILayout.LabelField("Prediction Value", GUILayout.Width(180));
-                        EditorGUILayout.LabelField(_target.PredictedValue.ToString(CultureInfo.CurrentCulture),
-                            GUILayout.Width(100));
-                    }
-                    EditorGUILayout.EndHorizontal();
+                        EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
+                        {
+                            EditorGUILayout.LabelField("Prediction", GUILayout.Width(180));
+                            EditorGUILayout.LabelField(_target.ProblemData.Output.ToString(CultureInfo.CurrentCulture),
+                                GUILayout.Width(100));
+                        }
+                        EditorGUILayout.EndHorizontal();
 
-                    GUI.contentColor = Color.white;
+                        EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
+                        {
+                            EditorGUILayout.LabelField("Prediction Value", GUILayout.Width(180));
+                            EditorGUILayout.LabelField(_target.PredictedValue.ToString(CultureInfo.CurrentCulture),
+                                GUILayout.Width(100));
+                        }
+                        EditorGUILayout.EndHorizontal();
+
+                        GUI.contentColor = Color.white;
+                    }
                 }
             }
             EditorGUILayout.EndVertical();

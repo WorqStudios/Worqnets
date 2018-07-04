@@ -11,7 +11,7 @@ namespace Worq.Worqnets.Examples.Perceptrons
     {
         public TrainingData TrainingData;
 
-        public int MaxEpochs = 10;
+        public int MaxEpochs = 100;
         public float Epsilon = 0.01f;
         public int RepetitionsAfterConverging = 2;
         public bool HasTrained;
@@ -19,7 +19,6 @@ namespace Worq.Worqnets.Examples.Perceptrons
         public float PredictedValue;
         public bool EnableDebug = true;
         public bool LastTrainingCouldNotConverge;
-        public bool SaveTrainData = true;
 
         public TrainDataEntry ProblemData;
 
@@ -54,6 +53,8 @@ namespace Worq.Worqnets.Examples.Perceptrons
             _repeatedAfterConverging = 0;
             LastTrainingCouldNotConverge = false;
 
+            CheckForTrainData();
+
             do
             {
                 _totalError = 0;
@@ -80,7 +81,9 @@ namespace Worq.Worqnets.Examples.Perceptrons
                 EpochsPerformed += 1;
             } while (EpochsPerformed < MaxEpochs && _repeatedAfterConverging <= RepetitionsAfterConverging);
 
-            HasTrained = true;
+            TrainingData.CalculatedWeights = _weights;
+            TrainingData.CalculatedBias = _bias;
+
             yield return new WaitForEndOfFrame();
         }
 
@@ -132,11 +135,20 @@ namespace Worq.Worqnets.Examples.Perceptrons
                 return;
             }
 
-            PredictedValue = CalculateWeightedSum(ProblemData.Values, _weights);
+            _bias = TrainingData.CalculatedBias;
+            PredictedValue = CalculateWeightedSum(ProblemData.Values, TrainingData.CalculatedWeights);
             ProblemData.Output = PredictedValue > 0 ? 1 : 0;
+        }
 
-            if (!SaveTrainData)
+        private void CheckForTrainData()
+        {
+            if (TrainingData == null) return;
+
+            if (TrainingData.CalculatedWeights == null || TrainingData.CalculatedWeights.Count < 1)
+            {
                 HasTrained = false;
+            }
+            else HasTrained = true;
         }
     }
 }
