@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using DefaultNamespace;
 using UnityEngine;
@@ -11,15 +12,21 @@ namespace Worq.Worqnets.Examples.Perceptrons
         public TrainingData TrainingData;
 
         public int MaxEpochs = 10;
+        public float Epsilon = 0.01f;
+        public int RepetitionsAfterConverging = 2;
         public bool HasTrained;
         public int EpochsPerformed;
         public float PredictedValue;
+        public bool EnableDebug = true;
+        public bool LastTrainingCouldNotConverge;
+        public bool SaveTrainData = true;
 
         public TrainDataEntry ProblemData;
 
         private List<float> _weights;
         private float _bias;
         private float _totalError;
+        private int _repeatedAfterConverging;
 
         private void InitializeWeights()
         {
@@ -34,24 +41,47 @@ namespace Worq.Worqnets.Examples.Perceptrons
             _bias = Random.Range(-1.0f, 1.0f);
         }
 
-        public void Train()
+        public void DoTrain()
+        {
+            StartCoroutine(Train());
+        }
+
+        private IEnumerator Train()
         {
             InitializeWeights();
 
-            for (var i = 0; i < MaxEpochs; i++)
+            EpochsPerformed = 0;
+            _repeatedAfterConverging = 0;
+            LastTrainingCouldNotConverge = false;
+
+            do
             {
                 _totalError = 0;
+
+                if (EpochsPerformed == MaxEpochs - 1)
+                {
+                    WorqnetsUtils.PrintMessage("Could Not Converge", WorqnetsUtils.MessageType.Error);
+                    LastTrainingCouldNotConverge = true;
+                    HasTrained = false;
+                    yield break;
+                }
 
                 for (var j = 0; j < TrainingData.TrainingDataSize; j++)
                 {
                     UpdateWeights(j);
-                    Debug.Log("W1: " + _weights[0] + " W2: " + _weights[1] + " Bias: " + _bias);
+                    if (EnableDebug)
+                        Debug.Log("W1: " + _weights[0] + " W2: " + _weights[1] + " Bias: " + _bias);
                 }
 
-                Debug.Log("Total Error: " + _totalError);
-            }
+                if (EnableDebug)
+                    Debug.Log("Total Error: " + _totalError);
+
+                if (_totalError <= Epsilon) _repeatedAfterConverging++;
+                EpochsPerformed += 1;
+            } while (EpochsPerformed < MaxEpochs && _repeatedAfterConverging <= RepetitionsAfterConverging);
 
             HasTrained = true;
+            yield return new WaitForEndOfFrame();
         }
 
         private float CalculateWeightedSum(IList<float> inputs, IList<float> weights)
@@ -104,7 +134,9 @@ namespace Worq.Worqnets.Examples.Perceptrons
 
             PredictedValue = CalculateWeightedSum(ProblemData.Values, _weights);
             ProblemData.Output = PredictedValue > 0 ? 1 : 0;
-            HasTrained = false;
+
+            if (!SaveTrainData)
+                HasTrained = false;
         }
     }
 }
