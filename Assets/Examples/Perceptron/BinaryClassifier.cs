@@ -18,7 +18,7 @@ namespace Worq.Worqnets.Examples.Perceptrons
         public bool HasTrained;
         public int EpochsPerformed;
         public float PredictedValue;
-        public bool EnableDebug = true;
+        public bool EnableTrainDebugging = true;
         public bool LastTrainingCouldNotConverge;
 
         public TrainDataEntry ProblemData;
@@ -93,11 +93,11 @@ namespace Worq.Worqnets.Examples.Perceptrons
                 {
                     UpdateWeights(i);
                     
-                    if (EnableDebug)
+                    if (EnableTrainDebugging)
                         Debug.Log("W1: " + _weights[0] + " W2: " + _weights[1] + " Bias: " + _bias);
                 }
 
-                if (EnableDebug)
+                if (EnableTrainDebugging)
                     Debug.Log("Total Error: " + _totalError);
 
                 if (_totalError <= Epsilon) _repeatedAfterConverging++;
@@ -137,6 +137,9 @@ namespace Worq.Worqnets.Examples.Perceptrons
             return CalculateWeightedSum(TrainingData.AllDataEntries[index].Values, _weights) > 0 ? 1 : 0;
         }
 
+        /// <summary>
+        /// Predicts the output of the provided data after training has occured.
+        /// </summary>
         public void Predict()
         {
             if (!HasTrained)
