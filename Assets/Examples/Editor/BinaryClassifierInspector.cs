@@ -44,7 +44,7 @@ namespace Worq.Worqnets.Examples.EditorScripts
                 _target.RepetitionsAfterConverging = EditorGUILayout.IntField("Repeat After Converging",
                     _target.RepetitionsAfterConverging);
                 GUILayout.Space(3);
-                _target.EnableTrainDebugging = EditorGUILayout.Toggle("Enable Debugging",
+                _target.EnableTrainDebugging = EditorGUILayout.Toggle("Enable Training Debugging",
                     _target.EnableTrainDebugging);
             }
             EditorGUILayout.EndVertical();
