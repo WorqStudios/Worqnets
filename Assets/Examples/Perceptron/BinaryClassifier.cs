@@ -40,12 +40,12 @@ namespace Worq.Worqnets.Examples.Perceptrons
             _bias = Random.Range(-1.0f, 1.0f);
         }
 
-        public void DoTrain()
+        public void Train()
         {
-            StartCoroutine(Train());
+            StartCoroutine(DoTrain());
         }
 
-        private IEnumerator Train()
+        private IEnumerator DoTrain()
         {
             InitializeWeights();
 

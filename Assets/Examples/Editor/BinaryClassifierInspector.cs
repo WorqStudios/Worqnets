@@ -50,7 +50,7 @@ namespace Worq.Worqnets.Examples.EditorScripts
             GUILayout.Space(5);
             if (GUILayout.Button("Re-Train"))
             {
-                _target.DoTrain();
+                _target.Train();
             }
 
             if (_target.HasTrained)
