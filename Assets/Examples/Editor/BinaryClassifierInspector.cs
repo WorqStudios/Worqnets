@@ -24,6 +24,8 @@ namespace Worq.Worqnets.Examples.EditorScripts
         {
             if (!_target) SetTarget();
 
+            if (_target.MaxEpochs < 1) _target.MaxEpochs = 1;
+
             GUILayout.Space(20);
 
             _target.TrainingData =

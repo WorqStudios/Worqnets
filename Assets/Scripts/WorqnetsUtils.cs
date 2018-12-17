@@ -21,7 +21,7 @@ namespace Worq.Worqnets.Scripts
                     Debug.LogError(message);
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException("messageType", messageType, null);
+                    throw new ArgumentOutOfRangeException(nameof(messageType), messageType, null);
             }
         }
     }
