@@ -38,7 +38,7 @@ namespace Worq.Worqnets.Examples.Perceptrons
 
             //For the dimension of the training data, add a new entry and set it's value to a
             //random value between -1 and 1.
-            for (var i = 0; i < TrainingData.Dimension; i += 1)
+            for (var i = 0; i < TrainingData.NumberOfInputs; i += 1)
             {
                 //Add a new entry
                 _weights.Add(0.0f);

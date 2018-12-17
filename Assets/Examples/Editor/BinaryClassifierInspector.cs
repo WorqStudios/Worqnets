@@ -75,9 +75,9 @@ namespace Worq.Worqnets.Examples.EditorScripts
 
             #region Problem Section
 
-            if (_target.ProblemData == null || _target.ProblemData.Values.Count != _target.TrainingData.Dimension)
+            if (_target.ProblemData == null || _target.ProblemData.Values.Count != _target.TrainingData.NumberOfInputs)
             {
-                _target.ProblemData = new TrainDataEntry(_target.TrainingData.Dimension);
+                _target.ProblemData = new TrainDataEntry(_target.TrainingData.NumberOfInputs);
             }
 
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
@@ -85,7 +85,7 @@ namespace Worq.Worqnets.Examples.EditorScripts
                 if (_target.HasTrained)
                 {
                     EditorGUILayout.LabelField("Problem Data");
-                    for (var i = 0; i < _target.TrainingData.Dimension; i++)
+                    for (var i = 0; i < _target.TrainingData.NumberOfInputs; i++)
                     {
                         _target.ProblemData.Values[i] =
                             EditorGUILayout.FloatField("Input" + (i + 1),

@@ -16,7 +16,7 @@ namespace Worq.Worqnets.Examples.EditorScripts
             SetTarget();
             if (_target == null) return;
             _target.AllDataEntries = _target.AllDataEntries ?? new List<TrainDataEntry>();
-            _target.OldDimension = _target.Dimension;
+            _target.OldDimension = _target.NumberOfInputs;
             _target.OldTrainingDataSize = _target.TrainingDataSize;
         }
 
@@ -32,19 +32,20 @@ namespace Worq.Worqnets.Examples.EditorScripts
             GUILayout.Space(20);
 
             _target.TrainingDataSize = EditorGUILayout.IntField("Training Set Size", _target.TrainingDataSize);
-            _target.Dimension = EditorGUILayout.IntField("Dimension", _target.Dimension);
+            _target.NumberOfInputs = EditorGUILayout.IntField("Number Of Inputs", _target.NumberOfInputs);
 
             if (_target.AllDataEntries == null || _target.AllDataEntries.Count < 1 ||
-                _target.Dimension != _target.OldDimension || _target.TrainingDataSize != _target.OldTrainingDataSize)
+                _target.NumberOfInputs != _target.OldDimension ||
+                _target.TrainingDataSize != _target.OldTrainingDataSize)
             {
                 _target.AllDataEntries = new List<TrainDataEntry>();
 
                 for (var i = 0; i < _target.TrainingDataSize; i++)
                 {
-                    _target.AllDataEntries.Add(new TrainDataEntry(_target.Dimension));
+                    _target.AllDataEntries.Add(new TrainDataEntry(_target.NumberOfInputs));
                 }
 
-                _target.OldDimension = _target.Dimension;
+                _target.OldDimension = _target.NumberOfInputs;
                 _target.OldTrainingDataSize = _target.TrainingDataSize;
             }
 
@@ -56,13 +57,13 @@ namespace Worq.Worqnets.Examples.EditorScripts
             {
                 for (var i = 0; i < _target.TrainingDataSize; i++)
                 {
-                    EditorGUILayout.LabelField("Training Data " + (i + 1));
+                    EditorGUILayout.LabelField("Training Set " + (i + 1));
                     EditorGUILayout.BeginVertical(EditorStyles.helpBox);
                     {
-                        for (var j = 0; j < _target.Dimension; j++)
+                        for (var j = 0; j < _target.NumberOfInputs; j++)
                         {
                             _target.AllDataEntries[i].Values[j] =
-                                EditorGUILayout.FloatField("Input" + (j + 1), _target.AllDataEntries[i].Values[j]);
+                                EditorGUILayout.FloatField("Input " + (j + 1), _target.AllDataEntries[i].Values[j]);
                         }
 
                         GUILayout.Space(5);

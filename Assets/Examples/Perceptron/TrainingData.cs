@@ -7,7 +7,7 @@ namespace Worq.Worqnets.Examples.Perceptrons
     public class TrainingData : ScriptableObject
     {
         public List<TrainDataEntry> AllDataEntries;
-        public int Dimension;
+        public int NumberOfInputs;
         public int OldDimension;
         public int TrainingDataSize;
         public int OldTrainingDataSize;
