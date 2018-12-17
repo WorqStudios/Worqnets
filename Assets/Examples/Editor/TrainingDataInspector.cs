@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using DefaultNamespace;
+using Worq.Worqnets.Scripts;
 using UnityEditor;
 using UnityEngine;
 using Worq.Worqnets.Examples.Perceptrons;

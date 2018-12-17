@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace DefaultNamespace
+﻿namespace Worq.Worqnets.Scripts
 {
     public static class WorqnetsVariables
     {

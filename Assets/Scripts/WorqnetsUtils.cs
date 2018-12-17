@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace DefaultNamespace
+namespace Worq.Worqnets.Scripts
 {
     public static class WorqnetsUtils
     {
