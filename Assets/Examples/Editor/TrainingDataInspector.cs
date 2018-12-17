@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Worq.Worqnets.Scripts;
 using UnityEditor;
 using UnityEngine;
 using Worq.Worqnets.Examples.Perceptrons;
@@ -31,8 +30,10 @@ namespace Worq.Worqnets.Examples.EditorScripts
 
             GUILayout.Space(20);
 
-            _target.TrainingDataSize = EditorGUILayout.IntField("Training Set Size", _target.TrainingDataSize);
-            _target.NumberOfInputs = EditorGUILayout.IntField("Number Of Inputs", _target.NumberOfInputs);
+            if (GUI.changed) EditorUtility.SetDirty(_target);
+
+            _target.TrainingDataSize = EditorGUILayout.IntField("Number Of Training Sets", _target.TrainingDataSize);
+            _target.NumberOfInputs = EditorGUILayout.IntField("Inputs per Training Set", _target.NumberOfInputs);
 
             if (_target.AllDataEntries == null || _target.AllDataEntries.Count < 1 ||
                 _target.NumberOfInputs != _target.OldDimension ||

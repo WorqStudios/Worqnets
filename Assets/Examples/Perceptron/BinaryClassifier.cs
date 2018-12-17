@@ -72,8 +72,8 @@ namespace Worq.Worqnets.Examples.Perceptrons
             LastTrainingCouldNotConverge = false;
 
             //Get out of training if train data is null.
-            if (!CheckForTrainData()) yield break;
-            
+            if (!TrainingData) yield break;
+            CheckForTrainData();
             //Train at least once.
             do
             {
@@ -92,7 +92,7 @@ namespace Worq.Worqnets.Examples.Perceptrons
                 for (var i = 0; i < TrainingData.TrainingDataSize; i++)
                 {
                     UpdateWeights(i);
-                    
+
                     if (EnableTrainDebugging)
                         Debug.Log("W1: " + _weights[0] + " W2: " + _weights[1] + " Bias: " + _bias);
                 }
@@ -178,20 +178,16 @@ namespace Worq.Worqnets.Examples.Perceptrons
         /// <summary>
         /// Check to see if a training data has been provided. No use training if training data does not exist.
         /// </summary>
-        private bool CheckForTrainData()
+        private void CheckForTrainData()
         {
-            //Get out of the function if training data is not provided
-            if (TrainingData == null) return false;
-
             if (TrainingData.CalculatedWeights == null || TrainingData.CalculatedWeights.Count < 1)
             {
                 HasTrained = false;
-                return false;
             }
-
-            HasTrained = true;
-
-            return true;
+            else
+            {
+                HasTrained = true;
+            }
         }
     }
 }
