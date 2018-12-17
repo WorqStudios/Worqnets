@@ -11,6 +11,7 @@ namespace Worq.Worqnets.Examples.Perceptrons
     public class BinaryClassifier : MonoBehaviour
     {
         public TrainingData TrainingData;
+        public TrainingData OldTrainingData;
 
         public int MaxEpochs = 100;
         public float Epsilon = 0.01f;
@@ -20,6 +21,7 @@ namespace Worq.Worqnets.Examples.Perceptrons
         public float PredictedValue;
         public bool EnableTrainDebugging = true;
         public bool LastTrainingCouldNotConverge;
+        public bool HasPredictedOnce;
 
         public TrainDataEntry ProblemData;
 
@@ -94,11 +96,17 @@ namespace Worq.Worqnets.Examples.Perceptrons
                     UpdateWeights(i);
 
                     if (EnableTrainDebugging)
+                    {
+                        //Debug.Log("========================================");
                         Debug.Log("W1: " + _weights[0] + " W2: " + _weights[1] + " Bias: " + _bias);
+                    }
                 }
 
                 if (EnableTrainDebugging)
+                {
                     Debug.Log("Total Error: " + _totalError);
+                    //Debug.Log("========================================");
+                }
 
                 if (_totalError <= Epsilon) _repeatedAfterConverging++;
                 EpochsPerformed += 1;

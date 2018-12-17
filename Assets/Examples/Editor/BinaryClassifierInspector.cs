@@ -26,6 +26,19 @@ namespace Worq.Worqnets.Examples.EditorScripts
 
             if (_target.MaxEpochs < 1) _target.MaxEpochs = 1;
 
+            if (!_target.TrainingData)
+            {
+                _target.HasTrained = false;
+                _target.HasPredictedOnce = false;
+            }
+
+            if (_target.OldTrainingData != _target.TrainingData)
+            {
+                _target.HasTrained = false;
+                _target.OldTrainingData = _target.TrainingData;
+                _target.HasPredictedOnce = false;
+            }
+
             GUILayout.Space(20);
 
             _target.TrainingData =
@@ -50,9 +63,10 @@ namespace Worq.Worqnets.Examples.EditorScripts
             EditorGUILayout.EndVertical();
 
             GUILayout.Space(5);
-            if (GUILayout.Button("Re-Train"))
+            if (GUILayout.Button("Train"))
             {
                 _target.Train();
+                _target.HasPredictedOnce = false;
             }
 
             if (_target.HasTrained)
@@ -71,6 +85,7 @@ namespace Worq.Worqnets.Examples.EditorScripts
             if (_target.LastTrainingCouldNotConverge)
             {
                 EditorGUILayout.HelpBox("Last Training Could Not Converge", MessageType.Error);
+                _target.HasPredictedOnce = false;
             }
 
             #region Problem Section
@@ -96,6 +111,7 @@ namespace Worq.Worqnets.Examples.EditorScripts
                     if (GUILayout.Button("Predict"))
                     {
                         _target.Predict();
+                        _target.HasPredictedOnce = true;
                     }
                 }
                 else
@@ -103,7 +119,7 @@ namespace Worq.Worqnets.Examples.EditorScripts
                     EditorGUILayout.HelpBox("Perform Training first", MessageType.Warning);
                 }
 
-                if (!_target.LastTrainingCouldNotConverge)
+                if (!_target.LastTrainingCouldNotConverge && _target.HasPredictedOnce)
                 {
                     EditorGUILayout.LabelField("Last Prediction Results");
                     EditorGUILayout.BeginVertical(EditorStyles.helpBox);
@@ -121,7 +137,7 @@ namespace Worq.Worqnets.Examples.EditorScripts
 
                         EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
                         {
-                            EditorGUILayout.LabelField("Prediction Value", GUILayout.Width(180));
+                            EditorGUILayout.LabelField("Actual Prediction Value", GUILayout.Width(180));
                             EditorGUILayout.LabelField(_target.PredictedValue.ToString(CultureInfo.CurrentCulture),
                                 GUILayout.Width(100));
                         }
