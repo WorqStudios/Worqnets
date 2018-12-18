@@ -7,7 +7,9 @@ namespace Worq.Worqnets.Examples.Perceptrons
     public class TrainDataEntry
     {
         public List<float> Values;
-        public float Output;
+        public float FloatOutput;
+        public int IntOutput;
+        public string StringOutput;
 
         public TrainDataEntry(int dimension)
         {

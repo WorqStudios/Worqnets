@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
-using Worq.Worqnets.Scripts;
+using Worq.Worqnets.Core;
+using Worq.Worqnets.Enums;
 using Random = UnityEngine.Random;
 
 namespace Worq.Worqnets.Examples.Perceptrons
@@ -18,7 +19,7 @@ namespace Worq.Worqnets.Examples.Perceptrons
         public int RepetitionsAfterConverging = 2;
         public bool HasTrained;
         public int EpochsPerformed;
-        public float PredictedValue;
+        public string PredictedValue;
         public bool EnableTrainDebugging = true;
         public bool LastTrainingCouldNotConverge;
         public bool HasPredictedOnce;
@@ -124,7 +125,7 @@ namespace Worq.Worqnets.Examples.Perceptrons
         /// <param name="index">The position of the training data in the training set.</param>
         private void UpdateWeights(int index)
         {
-            var error = TrainingData.AllDataEntries[index].Output - CalculateOutput(index);
+            var error = TrainingData.AllDataEntries[index].FloatOutput - CalculateOutput(index);
             _totalError += Math.Abs(error);
 
             for (var i = 0; i < _weights.Count; i++)
@@ -148,7 +149,9 @@ namespace Worq.Worqnets.Examples.Perceptrons
         /// <summary>
         /// Predicts the output of the provided data after training has occured.
         /// </summary>
-        public void Predict()
+        /// <param name="outputType">The type of output data.</param>
+        /// <returns></returns>
+        public void Predict(EPerceptronOutputType outputType)
         {
             if (!HasTrained)
             {
@@ -158,8 +161,23 @@ namespace Worq.Worqnets.Examples.Perceptrons
             }
 
             _bias = TrainingData.CalculatedBias;
-            PredictedValue = CalculateWeightedSum(ProblemData.Values, TrainingData.CalculatedWeights);
-            ProblemData.Output = PredictedValue > 0 ? 1 : 0;
+
+            switch (outputType)
+            {
+                case EPerceptronOutputType.Integer:
+                    PredictedValue =
+                        CalculateWeightedSum(ProblemData.Values, TrainingData.CalculatedWeights).ToString();
+                    break;
+                case EPerceptronOutputType.String:
+                    PredictedValue = CalculateWeightedSum(ProblemData.Values, TrainingData.CalculatedWeights) > 0
+                        ? TrainingData.OutputClass2
+                        : TrainingData.OutputClass1;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(outputType), outputType, null);
+            }
+
+            //ProblemData.FloatOutput = PredictedValue > 0 ? 1 : 0;
         }
 
         private float CalculateWeightedSum(IList<float> inputs, IList<float> weights)

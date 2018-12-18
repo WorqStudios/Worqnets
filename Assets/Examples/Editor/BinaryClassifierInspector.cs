@@ -110,7 +110,7 @@ namespace Worq.Worqnets.Examples.EditorScripts
                     GUILayout.Space(5);
                     if (GUILayout.Button("Predict"))
                     {
-                        _target.Predict();
+                        _target.Predict(_target.TrainingData.OutputType);
                         _target.HasPredictedOnce = true;
                     }
                 }
@@ -130,7 +130,7 @@ namespace Worq.Worqnets.Examples.EditorScripts
                         EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
                         {
                             EditorGUILayout.LabelField("Prediction", GUILayout.Width(180));
-                            EditorGUILayout.LabelField(_target.ProblemData.Output.ToString(CultureInfo.CurrentCulture),
+                            EditorGUILayout.LabelField(_target.ProblemData.FloatOutput.ToString(CultureInfo.CurrentCulture),
                                 GUILayout.Width(100));
                         }
                         EditorGUILayout.EndHorizontal();

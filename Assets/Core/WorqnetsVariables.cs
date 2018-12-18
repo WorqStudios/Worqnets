@@ -1,4 +1,4 @@
-﻿namespace Worq.Worqnets.Scripts
+﻿namespace Worq.Worqnets.Core
 {
     public static class WorqnetsVariables
     {
